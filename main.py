@@ -33,8 +33,9 @@ if formato=="c":
         webexconsole(box)
 
         # logica para usuarios
-        msg=logica(box,usermail)
+        msg,arquivo=logica(box,usermail)
         print (msg)
+        print ("arquivo:"+str(arquivo))
 
 elif formato=='w':
     
@@ -42,4 +43,4 @@ elif formato=='w':
 
 else:
 
-    print ("nenhum formato selecionado. Selecione (c) para teste e (w) para producao")
+    print ("nenhum formato selecionado. Selecione (c) para teste ou (w) para producao")

@@ -50,6 +50,3 @@ def run(server_class=HTTPServer, handler_class=S, port=int(os.getenv('PORT',8080
        	    pass
         httpd.server_close()
         logging.info('Stopping httpd...\n')
-
-
-

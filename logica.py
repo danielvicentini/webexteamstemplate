@@ -23,6 +23,11 @@ def logica(comando,usermail):
     # Para o caso de nenhum pedido coberto aqui
     mais="\nEscreva 'mais' para saber suas opções"
     
+    # 21.11.19
+    # variavel arquivo para o caso do bot devolver arquivos anexados
+    
+    arquivo=""
+    
     msg=""
 	
     # chamadas de acordo com os parametros
@@ -54,7 +59,7 @@ def logica(comando,usermail):
         msg=APICall(site,token)
         
 
-    return msg+mais
+    return msg,arquivo
 
 
 def trataPOST(content):
@@ -72,10 +77,10 @@ def trataPOST(content):
             sala=webextalk[1]
 
             # executa a logica
-            msg=logica(mensagem,usermail)
+            msg,arquivo=logica(mensagem,usermail)
         
             # Envia resposta na sala apropriada
-            webexmsgRoomviaID(sala,msg)
+            webexmsgRoomviaID(sala,msg,arquivo)
 
     except:
             print("POST nao reconhecido")
