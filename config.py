@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Social main config file
-# import vars from config_shared 
+# My Bot config file
+# Daniel Vicentini 24-7-2020 v2.0
 # bot info
 # admins info
 
@@ -10,13 +10,13 @@ import json
 # DONT TOUCH THIS VARS - THEY'RE GET FROM config_shared.py
 
 bot_language="BR"
-bottoken="MjU3NGQyODUtZjg2MC00MmQ0LThiYjUtMTUyZTNjODcyZTY3MGExNTRkYTktYTdh_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f"
-botmail="infobot@webe@sparkbot.io"
-webhook_url="http://protobot.herokuapp.com"
-webhook_name="protobot"
-admins="dvicenti@cisco.com"
+bottoken="<bot token>"
+botmail="bot@mail.com"
+webhook_url="<URL Address para webhooks>"
+webhook_name="<tag>"
+admins="Nada"
 admins_room="Nada"
-bot_server_port=7000
+bot_server_port=<PORT>
 
     
 
