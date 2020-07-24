@@ -7,6 +7,7 @@ Modelo para criação do seu bot Webex Teams.
 * Pronto para rodar em PaaS ou IaaS
 * Implantação Rápida: basta definir os comandos que o Bot vai entender
 * Reduzido tempo para protótipo de produção
+* Interface com usuário em Portugues ou Ingles
 
 ## Funcionalidades
 
