@@ -1,0 +1,26 @@
+{	"opcoes": [{
+		"tag": "rodar algo com dois parametros",
+		"title": "Rodar algo com dois parametros",
+		"desc": "Exemplo que pede para usuario informar 2 parametros.",
+		"option": 30,
+		"admin": false,
+		"req": true,
+		"params": "parametro 1, parametro 2"
+	}, {
+		"tag": "rodar algo com um parametro",
+		"title": "Rodar algo com um parametro",
+		"desc": "Exemplo que pede para usuario informar 1 parametro.",
+		"option": 20,
+		"admin": false,
+		"req": true,
+		"params": "parametro 1"
+		
+	}, {
+		"tag": "rodar algo sem parametros",
+		"title": "Rodar algo sem parametros",
+		"desc": "Exemplo que roda uma funcao sem parametros.",
+		"option": 10,
+		"admin": false,
+		"req": false
+	}]
+}

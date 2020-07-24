@@ -1,78 +1,79 @@
-﻿from webexteams import *
+﻿# -*- coding: utf-8 -*-
 
+from webexteams import getwebexRoomID, getwebexUserID, CleanUpWebhook, DeleteWebhook, CriaWebhook, WebexIncUser, webexmsgRoom, webexRoomsList, WebexRoomDel
 
 def webexconsole(box):
 
     #################################################################
-    # FERRAMENTAS DE MANUTENCAO PARA CONSOLE
-    # Utiliza para entender existencia de webhooks, salas e respectiva manutencao
+    # admin Console tools
+    # webhook and rooms management (create, delete, etc)
      
     if box == "help+":
-       msg="Comandos disponiveis:\nuserid: Identifica ID do usuario\nroomid: Identifica ID da sala\nusermail: troca usuario\nnovasala: Cria uma sala nova com usuario\nremovesala: Remove sala\nsalas: lista salas que pertenco\n"
-       msg=msg+("webhook_create: cria webhook\nwebhook_del: apaga webhooks com este nome\nwebhook_clean: lista webhooks autuais, apagando os desativos\n")
+       msg="Available commands:\nuserid: Identifies userId\nroomid: Identifies roomid\nusermail: change user\nnovasala: Creates new room with an user\nremovesala: Deletes room\nsalas: lists all roms usermail belongs to\n"
+       msg=msg+("webhook_create: creates webhook\nwebhook_del: deletes webhook\nwebhook_clean: lists webhooks and deletes disabled ones\n")
        print (msg)
 
-    #troca usuario para testar aplicacoes webexteams
+    #gets usermail
     if box=="usermail":
-        usermail=input("seu email>")
+        usermail=input("your email>")
 
-    # chamada funcao para encontrar id do user
+    # find webex userid
     if box == "userid":
-       email=input("Email do user:")
+       email=input("Usermail:")
        msg = getwebexUserID(email)
        print (msg)
 
-    # chamada funcao para encontrar nome da sala
+    # find room nome
     if box == "roomid":
-        sala=input("nome da sala? (todo ou partes):")
+        sala=input("Room Name? (type at least a piece of the room's name):")
         msg = getwebexRoomID(sala)
         print (msg)
 
-    # cleaning de webhooks
-    # lista webhooks, e apaga os desativados
+    # Webhooks cleaning
+    # list webhooks, delete the disabled ones
     if box =="webhook_clean":
         msg=CleanUpWebhook()
         print(msg)
 
-	# apaga todos os webhooks com <nome> caso nome seja informado
+	# Delete a specific webhook
     if box =="webhook_del":
-        nome=input("nome do webhook:")
+        nome=input("webhook name:")
         msg=DeleteWebhook(nome)
         print(msg)
 
-    # cria webhook
+    # Create webhook
     if box =="webhook_create":
-       nome=input("nome do webhook:")
-       url=input("endereço http:")
+       nome=input("webhook tag:")
+       url=input("webhook http address:")
        msg=CriaWebhook(nome,url)
        print(msg)
 
-	# chamada de funcao para Criar nova sala com user 
+	# Create a room and includes an user 
     if box == "novasala":
-       email=input ("Qual email para incluir na sala?:")
+       email=input ("usermail to be included:")
        msg=getwebexUserID(email)
 
        if msg!="erro":
-           novasala=input ('qual o nome da sala?:')
+           novasala=input ('Room name:')
            msg=WebexIncUser(novasala,email)
-           webexmsgRoom(novasala,"ola' "+str(email))
+           webexmsgRoom(novasala,"Hello' "+str(email))
        else:
-            msg="erro para identificar user"
+            msg="usermail not identified."
 
        print(msg)
 
-    # Remove Sala
+    # Deletes a room
     if box == "removesala":
-        nome_sala=input('qual o nome da sala?:')
+        nome_sala=input('Room name:')
         msg=WebexRoomDel(getwebexRoomID(nome_sala))
         print(msg)
 
-    # Lista salas
+    # List all Rooms
     if box =="salas":
         msg = webexRoomsList()
         print (msg)
             
-    # FIM DAS FERRAMENTAS
+    # END Admin console tools options
     #################################################################
 
     return
