@@ -28,22 +28,9 @@ memoria={}
 #------------------------------------------------------
 #  Config Room
 #------------------------------------------------------
-# Config agora é criado pelo bot e salva
-# Se ja'existir, recupera
-# 15.7.20
-#padrao= {
-#	"admin":admins ,
-#	"rooms": {
-#		 "<rom name>": <max people> ,
-#		 "<other rooms>": <max peopled>
-#		... : ...
-#	}
-#}
-
-#---------------------------------------------------
-# Bot options
-#---------------------------------------------------
-
+#
+# Use this session if you want to load a config file for you app
+#
 def le_config():
     configuracao=dict()
     try:
@@ -56,6 +43,10 @@ def le_config():
 configuracao=dict()
 # carrega  configuracoes, caso tenha
 configuracao = le_config()
+
+#---------------------------------------------------
+# Bot options
+#---------------------------------------------------
 
 # Bot options
 # config strcuture
@@ -75,7 +66,7 @@ configuracao = le_config()
 # NOTA IMPORTANTE:
 # O Arquivo json precisa ser salvo em UTF-8 e EOL deve ser Unix LF
 # Usar o notepad++ para isto
-# do contrário dará erro na leitura do arquivo no Unix
+# do contrário dará erro na leitura do arquivo no ambiente Unix
 
 novas_opcoes=dict()
 # carrega opcoes do arquivo options.json
