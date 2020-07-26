@@ -4,21 +4,15 @@
 # Daniel 6.26.2020
 
 # admins
-from config import admins_room, admins, bot_language
+from config import admins, bot_language
 
 # Bot config
-from config import memoria, botmail, webhook_name, configuracao, novas_opcoes
+from config import memoria, configuracao, novas_opcoes
 # funcoes do projeto
 from funcoes import executa
 
 
-# Webex functions
-from webexteams import getwebexMsg, webexmsgRoomviaID, getwebexRoomID, getwebexUserID, webexmsgUser
-
-
-
-
-# ver 1.5 - 11.5.20
+# ver 2.1 - 24.7.20
 
 # Functions
 
