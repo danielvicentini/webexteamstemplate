@@ -7,7 +7,7 @@
 
 import json
 
-# DONT TOUCH THIS VARS - THEY'RE GET FROM config_shared.py
+# Edit this  for your app
 
 bot_language="BR"
 bottoken="<bot token>"
