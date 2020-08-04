@@ -18,14 +18,14 @@ if msg=="erro":
 
 
 #Formato de execucao em modo console (teste)
-formato = "c"
+formato = "w"
 
 # Formato da conversa
 # 0 = usuário constroi sua própria arvore de decisão
 # 1 = usuário usa o mecanismo pronto de decisão (texto) ou via Cards
 conversa = 1
 
-if formato=="w":
+if formato=="c":
 
     box=""
 
