@@ -5,7 +5,7 @@
 
 import json
 
-from webexteamssdk import WebexTeamsAPI, cards
+from webexteamssdk import WebexTeamsAPI, cards  
 from config import bottoken
 
 from webexteamssdk.models.cards.inputs import Number, Text
@@ -348,7 +348,7 @@ def getCardInfo(msgID):
     return pessoa,sala        
 
 
-def SendCard(sala,cartao):
+def SendCard(salaid,cartao):
 
     # Send a Card to a room
 
@@ -363,7 +363,7 @@ def SendCard(sala,cartao):
     # pega novo da sala
     resultado=""
     
-    salaid=getwebexRoomID(sala)
+    
    
     if salaid!=None:
         #print(f"Enviando card para sala:{salaid}")

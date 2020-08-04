@@ -19,7 +19,7 @@ from webexteamssdk.models.cards.card import AdaptiveCard
 from webexteamssdk.models.cards.actions import Submit
 from webexteams import SendCard, getwebexRoomID
 
-from webexteams import getCardInputs,getCardInfo
+from webexteams import getCardInputs,getCardInfo, getwebexRoomID
 
 # ver 3.0 - 1.8.20
 # ver 1.5 - 11.5.20
@@ -37,9 +37,6 @@ from webexteams import getCardInputs,getCardInfo
 def opcoes_para_user_card(usermail,sala):
 
     global novas_opcoes
-    
-    if sala=="":
-        sala=input("sala:")
     
     # Ler options.json
 
@@ -314,6 +311,8 @@ def logica(comando,usermail,sala):
     global aguardando
     global memoria
     global configuracao
+
+    salaid=getwebexRoomID(sala)
 
     # faz a logica de entender o comando pedido e a devida resposta para o usuario
     # o parametro usermail e' utilizado para identificar o usuario que solicitou o comando
@@ -596,14 +595,14 @@ def logica(comando,usermail,sala):
     
     # chama o card de opções
     if comando=="menucard":
-        result=opcoes_para_user_card(usermail,sala)
+        result=opcoes_para_user_card(usermail,salaid)
 
     # chama um card específico
     # o comando completo deve ser showcard:xy onde xy representa o codigo da opção
     if "showcard" in comando:
         try:
             cartao=comando.split(":")
-            result=funcao_card(int(cartao[1]),sala)
+            result=funcao_card(int(cartao[1]),salaid)
         except:
             result="erro"
 
