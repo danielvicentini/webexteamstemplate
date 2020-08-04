@@ -25,7 +25,7 @@ formato = "c"
 # 1 = usuário usa o mecanismo pronto de decisão (texto) ou via Cards
 conversa = 1
 
-if formato=="c":
+if formato=="w":
 
     box=""
 
