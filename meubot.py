@@ -18,7 +18,7 @@ if msg=="erro":
 
 
 #Formato de execucao em modo console (teste)
-formato = "w"
+formato = "c"
 
 # Formato da conversa
 # 0 = usuário constroi sua própria arvore de decisão
