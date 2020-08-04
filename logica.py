@@ -3,16 +3,26 @@
 # This code was originaly Documented in Portuguese Language
 # Daniel 6.26.2020
 
-# admins
+# admins & language
 from config import admins, bot_language
 
 # Bot config
 from config import memoria, configuracao, novas_opcoes
+
 # funcoes do projeto
-from funcoes import executa
+from funcoes import executa, executa_puro, executa_card
 
+# Card & Buttons
+from webexteamssdk.models.cards.inputs import Number, Text, Choices 
+from webexteamssdk.models.cards.components import TextBlock, Choice
+from webexteamssdk.models.cards.card import AdaptiveCard
+from webexteamssdk.models.cards.actions import Submit
+from webexteams import SendCard, getwebexRoomID
 
-# ver 2.1 - 24.7.20
+from webexteams import getCardInputs,getCardInfo
+
+# ver 3.0 - 1.8.20
+# ver 1.5 - 11.5.20
 
 # Functions
 
@@ -23,6 +33,120 @@ from funcoes import executa
 # Estas funções são chamadas dentro da logica
 
 # Reads and presentes options to the user (from comando such as 'Help')
+
+def opcoes_para_user_card(usermail,sala):
+
+    global novas_opcoes
+    
+    if sala=="":
+        sala=input("sala:")
+    
+    # Ler options.json
+
+    # definição de linguagem para o Card
+    if bot_language=="BR":
+        menu="Menu de Opções:"
+        envia="Enviar"
+        noe="Nenhum Opção Encontrada"
+    else:
+        menu="Available Options:"
+        envia="Submit"
+        noe="No Available Options"
+     
+    choices=list()
+
+    try:
+        # Le as opcoes de options conform admin ou não para montar opcoes
+        for b in novas_opcoes['opcoes']:
+            if usermail not in admins and b['admin']==True:
+                # pula sessão se usuário não for admin
+                continue
+            else:
+                choice_new=Choice(b['title'],str(b['option']))
+                choices.append(choice_new)
+    except:
+        pass
+
+    # monta Card
+    greeting=TextBlock(menu,size="Medium",color="Light")
+    body=[greeting]
+    if len(choices)==0:
+        # Coloca mensagem de 'Nenhuma Opção Encontrada" 
+        body.append(TextBlock(noe))
+
+        card= AdaptiveCard(body=body)
+
+    else:
+        escolhas=Choices(choices,"escolhas")
+        body.append(escolhas)
+        submit = Submit(title=envia,data={ "form":"menu"})
+
+        #card = AdaptiveCard(body=[greeting,first_name,age], actions=[submit]) 
+        card= AdaptiveCard(body=body, actions=[submit])
+
+    # Envia a msg
+    msg=SendCard(sala,card)
+    if "erro" in msg:
+        print("Erro no envio de card para a sala solicitada.")
+    
+
+    return msg
+
+def funcao_card(option,sala):
+
+    # envia um card específico conforme função
+    
+    #global configuracao
+
+    if bot_language=="BR":
+        envia="Enviar"
+        noe="Nenhum Opção Encontrada"
+    else:
+        envia="Submit"
+        noe="No Available Options"
+     
+
+    # resgata valores da opção pedida
+    title=optparam(option, "title")
+    desc=optparam(option,"desc")
+    parametros=optparam(option, "req")
+    
+    # Monta cabeçalho do card conforme a opção
+    greeting=TextBlock(title,size="Medium",color="Light")
+    greeting2=TextBlock(desc,size="Small",color="Accent")
+    
+    body=[greeting,greeting2]
+
+
+    # Adiciona os campos de parâmetros conforme opção
+    c=0
+    if parametros==True:
+        params=optparam(option,"params")
+        lista=params.split(",")
+        
+        while c<len(lista):
+            body.append(TextBlock(f"Digite o parametro para {lista[c]}:",size="Small"))
+            body.append(Text(f"parametro{c}",placeholder=lista[c]))
+            c+=1
+
+    # identificador de funcao que é adicionado ao card, este identificador
+    # dirá ao bot no POST seguinte para qual função estes parametros devem ir
+    # os campos Parametros inditcam o total de parametros do form
+    form={ "form":"function","option":option, "parametros":c}    
+
+    submit = Submit(title=envia,data=form)
+    
+
+    #card = AdaptiveCard(body=[greeting,first_name,age], actions=[submit]) 
+    card= AdaptiveCard(body=body,  actions=[submit])
+
+    msg=SendCard(sala,card)
+    if "erro" in msg:
+        print("Erro no envio de card para a sala solicitada.")
+
+    return msg
+
+
 
 def opcoes_para_user(usermail):
     
@@ -47,9 +171,10 @@ def opcoes_para_user(usermail):
                 z=z+1
 
         if bot_language=="BR":
-            msg=msg+"  \nDigite algumas palavras para começarmos.  \n"
+            msg=msg+"  \nDigite algumas palavras para começarmos ou digite ***menucard*** para o modo card.  \n"
+            
         else:         
-            msg=msg+"  \nType keywords so we can start our chat.  \n"
+            msg=msg+"  \nType keywords so we can start our chat or type ***menucard*** for card mode.  \n"
     except:
 
         if bot_language=="BR":
@@ -69,14 +194,16 @@ def optparam(codigo,item):
     
     # investiga nas opcoes existentes para o user
     # devolve o valor do item conforme o codigo da opcao
-    
+    dado=""
     for b in novas_opcoes['opcoes']:
-        if b['option']==codigo:
-            try:
-                dado=b[item]
-            except:
-                dado = "erro"
-        
+        try:
+            if b['option']==codigo:
+                try:
+                    dado=b[item]
+                except:
+                    dado = "erro"
+        except:
+            dado="erro"    
 
     return dado
 
@@ -182,12 +309,11 @@ def reinicia_user(usermail):
 # 1) logica
 # É chamado a medida que um comando chega do usuário, seja via console (testes) ou via http (produção)
 
-def logica(comando,usermail):
+def logica(comando,usermail,sala):
    
     global aguardando
     global memoria
     global configuracao
-
 
     # faz a logica de entender o comando pedido e a devida resposta para o usuario
     # o parametro usermail e' utilizado para identificar o usuario que solicitou o comando
@@ -276,8 +402,10 @@ def logica(comando,usermail):
         if msg=="":
             if bot_language=="BR":
                 msg="Olá. Digite ***ajuda*** para ver as opçoes disponíveis.  \nVou tentar adivinhar também o que você está procurando :-)  \n"
+                msg=msg+"Novo: Digite ***menucard*** para ver no formato de card.  \n"
             else:
                 msg="Hello. Type ***help*** to see available options.  \nI'll try to guess what you are looking for :-)  \n"
+                msg=msg+"New: Type ***menucard*** to see in card mode.  \n"
 
    # Part 3
    # Robot expects information from user
@@ -332,7 +460,7 @@ def logica(comando,usermail):
                 parametros=memoria[usermail]['typed']
                 
                 if bot_language=="BR":
-                    msg_params="Voce digitou os parâmetros : ("+parametros+")  \n"
+                    msg_params=f"Voce digitou os parâmetros : ({parametros})  \n"
                 else:
                     # English
                     msg_params=f"You typed: {parametros}  \n"
@@ -350,17 +478,18 @@ def logica(comando,usermail):
                 lista_parametros=memoria[usermail]['typed'].split(",")
  
                 #---------------------------------------------------------------------------------
-                # DIGITE SUA INTERPRETAÇÃO DE CÓDIGOS AQUI
+                # INTERPRETAÇÃO DE CÓDIGOS AQUI
+                # Suas funções estaram no módulo funções, que são chamados pela função executa(cod,lista de parametros)
                 # codigo = codigo do comando
                 # lista_parametros = lista com os parametros digitados pelo usuario, separado por virgulas
                 # o resultado do seu código deve ser atribuido a variavel msg
 
                 #trata os comandos conforme necessidade do projeto
                 resultado=""                            
-                resultado,arquivo,card=executa(codigo,lista_parametros)
+                resultado,arquivo=executa(codigo,lista_parametros)
                 
                 if resultado=="":
-                    # Devolveu resultado vazio - provavelmente ou porque funcao nao retornou nada ou erro no código
+                    # Devolveu resultado vazio - provavelmente porque funcao nao retornou nada ou erro no código
                     msg=msg+msg_empty
 
                 # uma vez que serviço entregue, zera a memória da conversa
@@ -458,6 +587,154 @@ def logica(comando,usermail):
         except:
             msg="Erro no resgate da memoria"    
 
-    #print (memoria)
+
+    #### NESTE TRECHO FUNCOES COM CARDS & BUTTONS
+
+    # monitorar resultado do chamado dos cards
+    
+    result=""
+    
+    # chama o card de opções
+    if comando=="menucard":
+        result=opcoes_para_user_card(usermail,sala)
+
+    # chama um card específico
+    # o comando completo deve ser showcard:xy onde xy representa o codigo da opção
+    if "showcard" in comando:
+        try:
+            cartao=comando.split(":")
+            result=funcao_card(int(cartao[1]),sala)
+        except:
+            result="erro"
+
+
+    if result=="erro":
+        if bot_language=="BR":
+            msg_erro="Não pude enviar Cartão."
+        else:
+            msg_erro="Could't send card to you."
+
+        # Se chegou até aqui ajuda ou envio de cartão falhou
+        msg=msg_erro
+
+
+    if result=="ok":
+        # se ok é porque um card foi enviado
+        if bot_language=="BR":
+            msg_card="Enviei um card para você.  \n"
+        else:
+            msg_card="I sent a card to you.  \n"
+        msg=msg_card
+
+
+
+    return msg,arquivo
+
+
+
+def logica_pura(comando,usermail):
+   
+    # Usar este modelo para casos de contruir uma logica nova
+    
+    #Separa o comando por espacos
+    #Primeiro item e'o comando em si, os demais sao parametros deste comando
+    comando=comando.lower()
+    sp=comando.split(" ")
+        
+    # 21.11.19
+    # variavel arquivo para o caso do bot devolver arquivos anexados
+    arquivo=""
+    
+    # no final, a função retorna o conteúdo de arquivo e msg = texto do robo
+    msg=""
+	
+    msg,arquivo=executa_puro(comando, usermail)
+
+    return msg,arquivo
+
+def logica_card(comando,usermail,sala):
+
+    # 2 de agosto de 2020
+    # Este bloco trata das opções usando o modelo Webex teams Card & buttons
+    # O usuário chama ajuda | help e o Teams se comunica via Cards
+    # após o usuário escolhar sua opção, um novo webhook informará o card escolhido
+    # O cardo escolhido chama a função abaixo respectiva para rodar o card daquela opção
+    # O resultado daquela opção é exibido em modo de texto, assim como a logica de arvore de decisão acima
+    # Na prática, o usuário pediu "Ajuda" e todo o restante do projeto se deu pelos Cards
+    #
+    
+    # para a funcao de mudança on-line de conversa de cards para arvore de decisão em texto
+  
+    # converte tudo para minúsculas
+    comando=comando.lower()
+    msg=""
+    arquivo=""
+
+    if sala==None:
+        sala=""
+
+    # chama o card de opções
+    if "helpcard" in comando or "ajudacard" in comando:
+        msg=opcoes_para_user_card(usermail,sala)
+
+    # chama um card específico
+    # o comando completo deve ser showcard:xy onde xy representa o codigo da opção
+    if "showcard" in comando:
+        try:
+            cartao=comando.split(":")
+            #msg=funcao_card(int(cartao[1]),usermail,sala)
+            msg=funcao_card(int(cartao[1]),sala)
+        except:
+            msg="erro"
+
+
+    if "get" in comando:
+
+        #msgid="Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OLzMxMTU3YTAxLWQ2NDUtMTFlYS05Y2I4LTM1MzJmNDg5OTJlMg"
+        msgid="Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OL2E4MGJlY2IwLWQ2NDYtMTFlYS05ODBiLWJmNmY2YWQyY2FlMA"
+        
+        dados=getCardInputs(msgid)
+        print (dados)
+        print (f"Form: {dados['form']}")
+
+    if "getinfo" in comando:
+
+        #msgid="Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OLzMxMTU3YTAxLWQ2NDUtMTFlYS05Y2I4LTM1MzJmNDg5OTJlMg"
+        msgid="Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OL2E4MGJlY2IwLWQ2NDYtMTFlYS05ODBiLWJmNmY2YWQyY2FlMA"
+        
+        pessoa,sala=getCardInfo(msgid)
+        
+
+    # resultados após envio dos cards.
+
+    if msg=="erro":
+        if bot_language=="BR":
+            msg_erro="Não pude enviar Cartão."
+        else:
+            msg_erro="Could't send card to you."
+
+        # Se chegou até aqui ajuda ou envio de cartão falhou
+        msg=msg_erro
+
+
+    # exclusivo para mudança do formato de conversa
+    if comando == "conversa1":
+        msg="conversa1"
+
+
+    if msg=="ok":
+        # se ok é porque um card foi enviado
+        if bot_language=="BR":
+            msg_card="Enviei um card para você.  \n"
+        else:
+            msg_card="I sent a card to you.  \n"
+        msg=msg_card
+
+    # Se chegou aqui, nada conhecido foi digitado e envia o comando de ajuda.
+    if msg=="":
+        if bot_language=="BR":
+            msg="Digite ***ajuda*** para ver os comandos disponíveis para você.  \n"
+        else:
+            msg="Type ***help*** for available options.  \n"
 
     return msg,arquivo

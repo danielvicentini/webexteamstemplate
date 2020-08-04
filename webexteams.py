@@ -3,14 +3,23 @@
 ##########################################################
 # Webexteams functions from webexteamssdk
 
-from webexteamssdk import WebexTeamsAPI
+import json
+
+from webexteamssdk import WebexTeamsAPI, cards
 from config import bottoken
+
+from webexteamssdk.models.cards.inputs import Number, Text
+from webexteamssdk.models.cards.components import TextBlock
+from webexteamssdk.models.cards.card import AdaptiveCard
+from webexteamssdk.models.cards.actions import Submit
+
+import os
 
 #########################################################
 ## FIXED VARS
 
-
-api = WebexTeamsAPI(access_token=bottoken)
+# Procura primeiro na var de ambiente, depois nas variaveis
+api = WebexTeamsAPI(access_token=(os.getenv('BOT_TOKEN',bottoken)))
 
 
 #########################################################
@@ -20,7 +29,7 @@ api = WebexTeamsAPI(access_token=bottoken)
 ## Webhooks functions
 
 def ValidaWebhook(webhook_name,webhook_url):
-
+    print (bottoken)
     # validates and creates webhook if necessary
 
     # Portuguese:
@@ -49,8 +58,11 @@ def CriaWebhook(webhook_name,webhook_url):
     # Retorna ok ou erro
     
 	# Webhook para msgs
+    # Atualização 27.1.20 - Cria webhook para Attachemtn (Card) junto
     try:
         api.webhooks.create(webhook_name,webhook_url,"messages","created")
+        # Cria segundo webhook para agora Cards
+        api.webhooks.create(f"{webhook_name}-card",webhook_url,resource="attachmentActions",event="created")
         resultado="ok"
     except:
         resultado="erro"
@@ -286,8 +298,86 @@ def getwebexMsg(msgID):
 	# Retorna lista com o [0]texto da mensagem informada [1]ID da sala e [2]email da pessoa
 	mensagem=api.messages.get(msgID)
 				
+
 	return mensagem.text,mensagem.roomId,mensagem.personEmail
 
+
+def getCardContent(msgID):
+	
+    # 7.27.2020
+    # Return Card content submited by user
+    
+    # Retorna todo o conteúdo do cartão (objeto)
+
+	# msgID é o parametro resgatado do corpo do webhook
+	# Retorna lista de objetos
+    
+    content=api.attachment_actions.get(msgID)
+		
+    return content
+
+def getCardInputs(msgID):
+
+    # 4.8.2020
+    # Returns inputs from Webex Teams Card in dict form
+    
+    # retorn o dicionário de inputs - que basicamente é o que precisamos para executar as funções
+    inputs=""
+    try:
+        content=getCardContent(msgID)
+        inputs=json.loads(json.dumps(content.inputs))
+    except:
+        print ("erro para recuperar inputs do card")
+        
+    return inputs        
+
+def getCardInfo(msgID):
+
+    # 4.8.2020
+    # Returns info (user e room)
+    
+    # retorn o dicionário de inputs - que basicamente é o que precisamos para executar as funções
+    
+    try:
+        content=getCardContent(msgID)
+        pessoa=content.personId
+        sala=content.roomId
+    except:
+        print ("erro para recuperar dados do card")
+        
+    return pessoa,sala        
+
+
+def SendCard(sala,cartao):
+
+    # Send a Card to a room
+
+    # Enviar Card
+    # Requer sala para enviar e card
+
+    # cabeçalho obrigatório
+    attachment = {     "contentType": "application/vnd.microsoft.card.adaptive", "content": cartao.to_dict(), }
+    
+    # Sent card to a room
+    # Envia card para uma sala
+    # pega novo da sala
+    resultado=""
+    
+    salaid=getwebexRoomID(sala)
+   
+    if salaid!=None:
+        #print(f"Enviando card para sala:{salaid}")
+        try:
+            api.messages.create(roomId=salaid,text=".",attachments=[attachment])
+            resultado="ok"
+        except:
+            resultado="erro"
+            print ("Falha no envio da sala")
+    else:
+        resultado="erro"
+        print ("Sala desconhecida")
+    
+    return resultado
 
 def webexmsgUser(user,msg):
 

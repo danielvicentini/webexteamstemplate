@@ -7,13 +7,18 @@
 from config import webhook_name, botmail, admins_room
 
 # importa logica e funcoes
-from logica import logica
+from logica import logica, logica_card
+from funcoes import executa
 
 # Webex functions
-from webexteams import getwebexMsg, webexmsgRoomviaID, getwebexRoomID, getwebexUserID, webexmsgUser
+from webexteams import getwebexMsg, webexmsgRoomviaID, getwebexRoomID, getwebexUserID, webexmsgUser, getCardInputs, getCardInfo
 import json
 import requests
 
+import os
+
+whn=os.getenv('WH_NAME',webhook_name)
+bot=os.getenv('BOT_MAIL',botmail)
 
 def trataPOST(content):
 
@@ -31,25 +36,84 @@ def trataPOST(content):
 
     try:
         # resposta as perguntas via webexteams
-        # trata mensagem quando nao e' gerada pelo bot. Se nao e' bot, entao usuario     
-        if content['name']==webhook_name and content['data']['personEmail']!=botmail:
+        # trata mensagem quando nao e' gerada pelo bot. Se nao e' bot, entao usuario   
+        # 
+        # Dois tipos de webhook podem chegar: texto escrito pelo usuario webhook tipo 1
+        # ou inputs relacionado a um card preenchido pelo user, webhook tipo 2
+        # Trata Webhook tipo mensagem  
+        #
+        # Webhook tipo 1
+        # Recebe msg, identifica quem escreveu e em que sala
+        # Em seguida executa a logica
+        # O retorno da logica (msg) é enviada para usuário na sala solicitada
+
+        if content['name']==whn and content['data']['personEmail']!=bot:
             # identifica id da mensagem
             msg_id=(content['data']['id'])
             # identifica dados da mensagem
             mensagem,sala,usermail=getwebexMsg(msg_id)
-            #usermail=webextalk[2]
-            #mensagem=webextalk[0]
-            #sala=webextalk[1]
 
             # executa a logica
             try:
-                msg,arquivo=logica(mensagem,usermail)
+                msg,arquivo=logica(mensagem,usermail,sala)
             except:
                 print ("Erro de logica.")
         
             # Envia resposta na sala apropriada
             webexmsgRoomviaID(sala,msg,arquivo)
 
+        # Webhook tipo 2 - Dados de Card
+        # Recebe msg, identifica quem escreveu e em que sala
+        # Identifica qual o tipo de função (se veio do menu ou de uma função especifica)
+        # Em seguida executa a logica
+        # O retorno da logica (msg) é enviada para usuário na sala solicitada
+
+
+         # Trata Webhook tipo Card
+        if content['name']==f"{whn}-card" and content['data']['personEmail']!=bot:
+            # identifica id da mensagem
+            msg_id=(content['data']['id'])
+            
+            # identifica dados enviados pelo Card
+            conteudo=getCardInputs(msg_id)
+            # identifica pessoa e sala que inputou no card
+            pessoa,sala=getCardInfo(msg_id)
+            
+            # identifica qual o tipo de form de origem
+            if conteudo['form']=="menu":
+                # Solicitação veio do menu
+                option=int(conteudo['escolhas'])
+
+                # Envia o card para user conforme codigo escolhido no menu
+                logica_card(f"showcard:{option}",usermail,sala)
+
+            if conteudo['form']=="function":
+                # Solicitação veio de uma opção especifica
+                option=int(conteudo['escolhas'])
+                parametros=conteudo['parametros']
+
+                # monta lista de parametros, casos existam
+                lista_parametros=list()
+                if parametros>0:
+                    z=0
+                    while z<parametros:
+                        item=f"parametro{z}"
+                        par=conteudo[item]
+                        lista_parametros.append(par)
+                        z+=1
+
+                # executa conforme o codigo escolhido no menu
+                # executa a logica
+                try:
+                    msg,arquivo=executa(option,lista_parametros)
+                except:
+                    print ("Erro de logica.")
+            
+                # Envia resposta na sala apropriada
+                webexmsgRoomviaID(sala,msg,arquivo)
+            
+            else:
+                print ("inputs de card desconhecidos.")
     
     except:
         print ("não é webhook esperado")
@@ -63,7 +127,7 @@ def trataPOST(content):
     # código para tratar alarmes
     # formato do alarme esperado:
 
-    #{"alarm": "distance-bot",
+    #{"alarm": "<identificador>",
     #"data": {
     #    "type": "00",
     #    "message": "Mensagem para o user",
@@ -71,9 +135,12 @@ def trataPOST(content):
     #    "image": "endereço da imagem"
     #}}
 
+    # defina aqui seu identificador
+    identificador="alarme1"
+
     # valida se POST é do tipo alarme esperado
     try:
-        if content['alarm']=="distance-bot":
+        if content['alarm']==identificador:
             
             imagem=""
 
