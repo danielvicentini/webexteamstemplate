@@ -34,7 +34,7 @@ def trataPOST(content):
     # Webex Webhooks
     ######
 
-    try:
+    ##try:
         # resposta as perguntas via webexteams
         # trata mensagem quando nao e' gerada pelo bot. Se nao e' bot, entao usuario   
         # 
@@ -47,77 +47,79 @@ def trataPOST(content):
         # Em seguida executa a logica
         # O retorno da logica (msg) é enviada para usuário na sala solicitada
 
-        if content['name']==whn and content['data']['personEmail']!=bot:
-            # identifica id da mensagem
-            msg_id=(content['data']['id'])
-            # identifica dados da mensagem
-            mensagem,sala,usermail=getwebexMsg(msg_id)
+    if content['name']==whn and content['data']['personEmail']!=bot:
+        # identifica id da mensagem
+        msg_id=(content['data']['id'])
+        # identifica dados da mensagem
+        mensagem,sala,usermail=getwebexMsg(msg_id)
+        print (mensagem,sala,usermail)
+        # executa a logica
+        try:
+            msg,arquivo=logica(mensagem,usermail,sala)
+        except:
+            print ("Erro de logica.")
+    
+        # Envia resposta na sala apropriada
+        webexmsgRoomviaID(sala,msg,arquivo)
 
+    # Webhook tipo 2 - Dados de Card
+    # Recebe msg, identifica quem escreveu e em que sala
+    # Identifica qual o tipo de função (se veio do menu ou de uma função especifica)
+    # Em seguida executa a logica
+    # O retorno da logica (msg) é enviada para usuário na sala solicitada
+
+
+        # Trata Webhook tipo Card
+    if content['name']==f"{whn}-card":
+        # identifica id da mensagem
+        msg_id=(content['data']['id'])
+        
+        # identifica dados enviados pelo Card
+        conteudo=getCardInputs(msg_id)
+        print(conteudo)
+        # identifica pessoa e sala que inputou no card
+        pessoa,sala=getCardInfo(msg_id)
+        # usermail não vem no webhook, precisa resgatar.
+        usermail=""
+        print(pessoa,sala)
+        # identifica qual o tipo de form de origem
+        if conteudo['form']=="menu":
+            # Solicitação veio do menu
+            option=int(conteudo['escolhas'])
+
+            # Envia o card para user conforme codigo escolhido no menu
+            logica_card(f"showcard:{option}",usermail,sala)
+
+        if conteudo['form']=="function":
+            # Solicitação veio de uma opção especifica
+            option=int(conteudo['option'])
+            parametros=conteudo['parametros']
+
+            # monta lista de parametros, casos existam
+            lista_parametros=list()
+            if parametros>0:
+                z=0
+                while z<parametros:
+                    item=f"parametro{z}"
+                    par=conteudo[item]
+                    lista_parametros.append(par)
+                    z+=1
+
+            # executa conforme o codigo escolhido no menu
             # executa a logica
             try:
-                msg,arquivo=logica(mensagem,usermail,sala)
+                msg,arquivo=executa(option,lista_parametros)
             except:
                 print ("Erro de logica.")
         
             # Envia resposta na sala apropriada
             webexmsgRoomviaID(sala,msg,arquivo)
+        
+        else:
+            print ("inputs de card desconhecidos.")
 
-        # Webhook tipo 2 - Dados de Card
-        # Recebe msg, identifica quem escreveu e em que sala
-        # Identifica qual o tipo de função (se veio do menu ou de uma função especifica)
-        # Em seguida executa a logica
-        # O retorno da logica (msg) é enviada para usuário na sala solicitada
-
-
-         # Trata Webhook tipo Card
-        nome=f"{whn}-card"
-        if content['name']==nome:
-            # identifica id da mensagem
-            msg_id=(content['data']['id'])
-            
-            # identifica dados enviados pelo Card
-            conteudo=getCardInputs(msg_id)
-            # identifica pessoa e sala que inputou no card
-            pessoa,sala=getCardInfo(msg_id)
-            
-            # identifica qual o tipo de form de origem
-            if conteudo['form']=="menu":
-                # Solicitação veio do menu
-                option=int(conteudo['escolhas'])
-
-                # Envia o card para user conforme codigo escolhido no menu
-                logica_card(f"showcard:{option}",usermail,sala)
-
-            if conteudo['form']=="function":
-                # Solicitação veio de uma opção especifica
-                option=int(conteudo['escolhas'])
-                parametros=conteudo['parametros']
-
-                # monta lista de parametros, casos existam
-                lista_parametros=list()
-                if parametros>0:
-                    z=0
-                    while z<parametros:
-                        item=f"parametro{z}"
-                        par=conteudo[item]
-                        lista_parametros.append(par)
-                        z+=1
-
-                # executa conforme o codigo escolhido no menu
-                # executa a logica
-                try:
-                    msg,arquivo=executa(option,lista_parametros)
-                except:
-                    print ("Erro de logica.")
-            
-                # Envia resposta na sala apropriada
-                webexmsgRoomviaID(sala,msg,arquivo)
-            
-            else:
-                print ("inputs de card desconhecidos.")
-    
-    except:
-        print ("não é webhook esperado")
+    #except:
+    #    print ("não é webhook esperado")
 
 
     # Alarms sent via POST

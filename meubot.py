@@ -2,7 +2,7 @@
 
 
 from config import webhook_name, webhook_url
-from webexteams_console_tools import webexconsole
+from webexteams_console_tools import webexconsole, getwebexRoomID
 from webexteams import ValidaWebhook
 from logica import logica, logica_pura, logica_card
 from webserver import run
@@ -37,8 +37,7 @@ if formato=="c":
 
 
     # Para o caso de sala vazia no modo de console
-    sala=input("nome da sala:")
-    
+    salaid=getwebexRoomID(input("nome da sala Webex:"))
 
     while box !="exit":
 
@@ -57,7 +56,7 @@ if formato=="c":
 
         if conversa==1:
             # usa arvore de decisao pronta ou card
-            msg,arquivo=logica(box,usermail,sala)
+            msg,arquivo=logica(box,usermail,salaid)
             print (msg)
             print ("arquivo:"+str(arquivo))
         

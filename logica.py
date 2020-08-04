@@ -306,13 +306,15 @@ def reinicia_user(usermail):
 # 1) logica
 # É chamado a medida que um comando chega do usuário, seja via console (testes) ou via http (produção)
 
-def logica(comando,usermail,sala):
-   
+def logica(comando,usermail,salaid):
+
+    # comando = o que user digitou
+    # usermail = email do usuario
+    # sala = roomId alvo - usado para as funções de Cards & Buttons
+
     global aguardando
     global memoria
     global configuracao
-
-    salaid=getwebexRoomID(sala)
 
     # faz a logica de entender o comando pedido e a devida resposta para o usuario
     # o parametro usermail e' utilizado para identificar o usuario que solicitou o comando
