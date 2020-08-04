@@ -17,9 +17,9 @@ from webexteamssdk.models.cards.inputs import Number, Text, Choices
 from webexteamssdk.models.cards.components import TextBlock, Choice
 from webexteamssdk.models.cards.card import AdaptiveCard
 from webexteamssdk.models.cards.actions import Submit
-from webexteams import SendCard, getwebexRoomID
 
-from webexteams import getCardInputs,getCardInfo, getwebexRoomID
+
+from webexteams import SendCard, getCardInputs,getCardInfo, getwebexRoomID
 
 # ver 3.0 - 1.8.20
 # ver 1.5 - 11.5.20

@@ -364,9 +364,10 @@ def SendCard(salaid,cartao):
     resultado=""
     
     
+    print (salaid)
    
     if salaid!=None:
-        #print(f"Enviando card para sala:{salaid}")
+        print(f"Enviando card para sala:{salaid}")
         try:
             api.messages.create(roomId=salaid,text=".",attachments=[attachment])
             resultado="ok"
@@ -377,6 +378,8 @@ def SendCard(salaid,cartao):
         resultado="erro"
         print ("Sala desconhecida")
     
+    print(resultado)
+
     return resultado
 
 def webexmsgUser(user,msg):
@@ -437,12 +440,14 @@ def webexmsgRoomviaID(sala,msg,arquivo):
             if arquivo!="erro":
                 # convert string para list
                 n_arquivo=list(arquivo.split("\n"))
-                api.messages.create(sala,None,None,None, msg, n_arquivo)
+                #api.messages.create(sala,None,None,None, markdown=msg, n_arquivo)
+                api.messages.create(roomId=sala,markdown=msg, files=n_arquivo)
+                
                 msg="ok"
 
         # Envia mensagem de texto somente para os casos onde nao ha arquivo anexo ou erro no arquivo    
         if arquivo=="" or arquivo==None or arquivo=="erro":
-            api.messages.create(sala,None,None,None, msg)
+            api.messages.create(roomId=sala,markdown=msg)
             msg="ok"
             
     except:

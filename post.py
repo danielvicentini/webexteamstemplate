@@ -70,7 +70,7 @@ def trataPOST(content):
 
 
          # Trata Webhook tipo Card
-        if content['name']==f"{whn}-card" and content['data']['personEmail']!=bot:
+        if content['name']==f"{whn}-card":
             # identifica id da mensagem
             msg_id=(content['data']['id'])
             
