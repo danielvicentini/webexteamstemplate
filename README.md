@@ -36,10 +36,10 @@ Modelo para criação do seu bot Webex Teams.
 * Apontar os parâmetros do Robo. Opções:
 * Opção 1: Editar o arquivo *config.py* com os 4 parametros necessários: Token, Email, URL e idenfiticado do Webhook
 * Opção 2: Criar os 4 parametros como variáveis de ambiente com os seguintes nomes:
-* WH_NAME = identificado ro webhook
-* WH_URL = endereço e porta da URL onde o bot ficará hospedado (porta default é 80)
-* BOT_MAIL = endereço de email do bot
-* BOT_TOKEN = Token do Bot
+    * WH_NAME = identificado ro webhook
+    * WH_URL = endereço e porta da URL onde o bot ficará hospedado (porta default é 80)
+    * BOT_MAIL = endereço de email do bot
+    * BOT_TOKEN = Token do Bot
 * Opcional: O Robô fornece informações em português ou ingles. Defina esta opção na variável *bot_language* no arquivo *config.py*. Use BR para português. Qualquer outro conjunto de letras será usado Inglês.
 
 ### Opções para o usuário
@@ -85,16 +85,16 @@ Neste exemplo, o robô tem 1 função de apresentar o parâmetro que você digit
 
 def executa(codigo,lista_de_parametros):
 
- if codigo=10:
+     if codigo=10:
  
-     #pega o primeiro parametro informado
-     
-     parametroDigitado=lista_de_parametros[0]
-     
-     msg=f"Você digitou {parametroDigitado}"
-     
+         #pega o primeiro parametro informado
 
-     return msg
+         parametroDigitado=lista_de_parametros[0]
+
+         msg=f"Você digitou {parametroDigitado}"
+
+
+         return msg
 
 Obrigatoriamente o robô devolve ao usuário o resultado escrito na variável *msg*.
 
@@ -119,6 +119,7 @@ Editar o arquivo *meubot.py* e editar a variável **formato="w"**. Neste modelo 
 Feito em Pyton 3.7.2
 
 Daniel Vicentini
+
 Atualizado em 05 de agosto de 2020
 
 v2.24 de julho de 2020
