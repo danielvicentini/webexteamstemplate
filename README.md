@@ -47,8 +47,6 @@ Modelo para criação do seu bot Webex Teams.
 
 O robô usará um arquivo de opções para apresentá-las ao usuário. Esta informação está no arquivo *options.json*.
 
-Edite este arquivo conforme o interesse do seu projeto.
-
 Identificação das opções:
 
 * option: identificador único do comando - este valor será utilizado para executar as funções que vc irá criar
@@ -58,6 +56,8 @@ Identificação das opções:
 * req: Falso ou Verdade para identificar se o comando requer ou não parâmetros
 * params: lista de parâmetros requeridos ao comando separados por vírgula.
 * admin: Falso ou Verdade se este comando é ou não um comando exclusivo para administradores
+
+Edite este arquivo conforme o interesse do seu projeto. Você pode editar o arquivo ou utilizar a ferramenta aqui inclusa chamada *construct.py* que é um **wizard** para construir seu arquivo de opções.
 
 ### Informações adicionais
 
