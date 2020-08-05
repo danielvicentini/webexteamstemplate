@@ -34,7 +34,7 @@ Modelo para criação do seu bot Webex Teams.
 
 * Fazer o clone deste projeto
 * Apontar os parâmetros do Robo. Opções:
-* Opção 1: Editar o arquivo *config.py* com os 4 parametros necessários: Token, Email, URL e idenfiticado do Webhook
+* Opção 1: Editar o arquivo *config.py* com os 4 parametros necessários: Token, Email, URL e identificador do Webhook
 * Opção 2: Criar os 4 parametros como variáveis de ambiente com os seguintes nomes:
     * WH_NAME = identificado ro webhook
     * WH_URL = endereço e porta da URL onde o bot ficará hospedado (porta default é 80)
