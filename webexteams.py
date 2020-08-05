@@ -287,19 +287,9 @@ def getwebexRoomID(sala):
 
 
 
+
 #########################################################
-# Message session
-
-def getwebexMsg(msgID):
-	
-    # Return msg contents by msgid
-
-	# msgID é o parametro resgatado do corpo do webhook
-	# Retorna lista com o [0]texto da mensagem informada [1]ID da sala e [2]email da pessoa
-	mensagem=api.messages.get(msgID)
-				
-
-	return mensagem.text,mensagem.roomId,mensagem.personEmail
+# Cards & Buttons Functions
 
 
 def getCardContent(msgID):
@@ -336,7 +326,7 @@ def getCardInfo(msgID):
     # 4.8.2020
     # Returns info (user e room)
     
-    # retorn o dicionário de inputs - que basicamente é o que precisamos para executar as funções
+    # retorna dados do usuário que preencheu o card
     
     try:
         content=getCardContent(msgID)
@@ -363,11 +353,10 @@ def SendCard(salaid,cartao):
     # pega novo da sala
     resultado=""
     
-    
-    print (salaid)
    
     if salaid!=None:
-        print(f"Enviando card para sala:{salaid}")
+        
+        # print(f"Enviando card para sala:{salaid}")
         try:
             api.messages.create(roomId=salaid,text=".",attachments=[attachment])
             resultado="ok"
@@ -378,9 +367,23 @@ def SendCard(salaid,cartao):
         resultado="erro"
         print ("Sala desconhecida")
     
-    print(resultado)
-
     return resultado
+
+
+#########################################################
+# Message session
+
+def getwebexMsg(msgID):
+	
+    # Return msg contents by msgid
+
+	# msgID é o parametro resgatado do corpo do webhook
+	# Retorna lista com o [0]texto da mensagem informada [1]ID da sala e [2]email da pessoa
+	mensagem=api.messages.get(msgID)
+				
+
+	return mensagem.text,mensagem.roomId,mensagem.personEmail
+
 
 def webexmsgUser(user,msg):
 

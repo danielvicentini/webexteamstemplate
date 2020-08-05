@@ -10,7 +10,7 @@ from config import admins, bot_language
 from config import memoria, configuracao, novas_opcoes
 
 # funcoes do projeto
-from funcoes import executa, executa_puro, executa_card
+from funcoes import executa, executa_puro
 
 # Card & Buttons
 from webexteamssdk.models.cards.inputs import Number, Text, Choices 
@@ -97,17 +97,22 @@ def funcao_card(option,sala):
 
     if bot_language=="BR":
         envia="Enviar"
-        noe="Nenhum Opção Encontrada"
+    
     else:
         envia="Submit"
-        noe="No Available Options"
+        
      
 
     # resgata valores da opção pedida
     title=optparam(option, "title")
-    desc=optparam(option,"desc")
-    parametros=optparam(option, "req")
-    
+    if title!="":
+        parametros=optparam(option, "req")
+        desc=optparam(option,"desc")
+        parametros=optparam(option, "req")
+    else:
+        # se chegou aqui nao encontrou dados com a opção informada
+        return "erro"
+
     # Monta cabeçalho do card conforme a opção
     greeting=TextBlock(title,size="Medium",color="Light")
     greeting2=TextBlock(desc,size="Small",color="Accent")
@@ -640,7 +645,7 @@ def logica_pura(comando,usermail):
     #Separa o comando por espacos
     #Primeiro item e'o comando em si, os demais sao parametros deste comando
     comando=comando.lower()
-    sp=comando.split(" ")
+    
         
     # 21.11.19
     # variavel arquivo para o caso do bot devolver arquivos anexados
@@ -650,92 +655,5 @@ def logica_pura(comando,usermail):
     msg=""
 	
     msg,arquivo=executa_puro(comando, usermail)
-
-    return msg,arquivo
-
-def logica_card(comando,usermail,sala):
-
-    # 2 de agosto de 2020
-    # Este bloco trata das opções usando o modelo Webex teams Card & buttons
-    # O usuário chama ajuda | help e o Teams se comunica via Cards
-    # após o usuário escolhar sua opção, um novo webhook informará o card escolhido
-    # O cardo escolhido chama a função abaixo respectiva para rodar o card daquela opção
-    # O resultado daquela opção é exibido em modo de texto, assim como a logica de arvore de decisão acima
-    # Na prática, o usuário pediu "Ajuda" e todo o restante do projeto se deu pelos Cards
-    #
-    
-    # para a funcao de mudança on-line de conversa de cards para arvore de decisão em texto
-  
-    # converte tudo para minúsculas
-    comando=comando.lower()
-    msg=""
-    arquivo=""
-
-    if sala==None:
-        sala=""
-
-    # chama o card de opções
-    if "helpcard" in comando or "ajudacard" in comando:
-        msg=opcoes_para_user_card(usermail,sala)
-
-    # chama um card específico
-    # o comando completo deve ser showcard:xy onde xy representa o codigo da opção
-    if "showcard" in comando:
-        try:
-            cartao=comando.split(":")
-            #msg=funcao_card(int(cartao[1]),usermail,sala)
-            msg=funcao_card(int(cartao[1]),sala)
-        except:
-            msg="erro"
-
-
-    if "get" in comando:
-
-        #msgid="Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OLzMxMTU3YTAxLWQ2NDUtMTFlYS05Y2I4LTM1MzJmNDg5OTJlMg"
-        msgid="Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OL2E4MGJlY2IwLWQ2NDYtMTFlYS05ODBiLWJmNmY2YWQyY2FlMA"
-        
-        dados=getCardInputs(msgid)
-        print (dados)
-        print (f"Form: {dados['form']}")
-
-    if "getinfo" in comando:
-
-        #msgid="Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OLzMxMTU3YTAxLWQ2NDUtMTFlYS05Y2I4LTM1MzJmNDg5OTJlMg"
-        msgid="Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OL2E4MGJlY2IwLWQ2NDYtMTFlYS05ODBiLWJmNmY2YWQyY2FlMA"
-        
-        pessoa,sala=getCardInfo(msgid)
-        
-
-    # resultados após envio dos cards.
-
-    if msg=="erro":
-        if bot_language=="BR":
-            msg_erro="Não pude enviar Cartão."
-        else:
-            msg_erro="Could't send card to you."
-
-        # Se chegou até aqui ajuda ou envio de cartão falhou
-        msg=msg_erro
-
-
-    # exclusivo para mudança do formato de conversa
-    if comando == "conversa1":
-        msg="conversa1"
-
-
-    if msg=="ok":
-        # se ok é porque um card foi enviado
-        if bot_language=="BR":
-            msg_card="Enviei um card para você.  \n"
-        else:
-            msg_card="I sent a card to you.  \n"
-        msg=msg_card
-
-    # Se chegou aqui, nada conhecido foi digitado e envia o comando de ajuda.
-    if msg=="":
-        if bot_language=="BR":
-            msg="Digite ***ajuda*** para ver os comandos disponíveis para você.  \n"
-        else:
-            msg="Type ***help*** for available options.  \n"
 
     return msg,arquivo
