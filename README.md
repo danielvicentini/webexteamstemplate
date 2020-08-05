@@ -77,7 +77,7 @@ Caso o usuário deseje utilizar o modelo de formulários (Cards) ele pode optar 
 
 ### Funcões a serem criadas conforme seu projeto
 
-Após seleção da opções e parâmetros, o robô executará a função específica conforme seu identificador único . Seu trabalho será popular o arquivo *funcoes.py* para executar suas funções. A função executa(codigo, lista_de_parametros) é a responsável em receber os dados e executar as funções.
+Após seleção da opções e parâmetros, o robô executará a função específica conforme seu identificador único . Seu trabalho será popular o arquivo *funcoes.py* para executar suas funções. A função *executa(codigo, lista_de_parametros)* é a responsável em receber os dados e executar as funções.
 
 ### Exemplo: função simples que devolve um informação
 
@@ -86,13 +86,34 @@ Neste exemplo, o robô tem 1 função de apresentar o parâmetro que você digit
 def executa(codigo,lista_de_parametros):
 
  if codigo=10:
-     # pega o primeiro parametro informado
-     parametro=lista_de_parametros[0]
-     msg=f"Você digitou {parametro}"
+ 
+     #pega o primeiro parametro informado
+     
+     parametroDigitado=lista_de_parametros[0]
+     
+     msg=f"Você digitou {parametroDigitado}"
+     
 
- return msg
+     return msg
 
 Obrigatoriamente o robô devolve ao usuário o resultado escrito na variável *msg*.
+
+### Testando o projeto
+
+Antes de entrar em produção, é possível rodar o código localmente em modo de texto (console) para testar suas funções.
+
+Para tanto, editar o arquivo *meubot.py* e editar a variável **formato="c"**. Neste modelo o robô não levantará o servidor Web para receber Webhooks, mas pode ser usado para testar suas funções. O programa perguntar um usermail para identificar o usuário e 1 sala Webex Teams para testes.
+
+Para sair do modo console, digite **Exit**.
+
+### Rodando o projeto
+
+Rodar o bot chamando o código principal *meubot.py*
+
+### Colocando em Produção
+
+Editar o arquivo *meubot.py* e editar a variável **formato="w"**. Neste modelo o robô levanta o servidor Web e fica no aguardo dos webhooks dos usuários.
+
 
 
 Feito em Pyton 3.7.2
