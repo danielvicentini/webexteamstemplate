@@ -4,7 +4,7 @@
 from config import webhook_name, webhook_url
 from webexteams_console_tools import webexconsole, getwebexRoomID
 from webexteams import ValidaWebhook
-from logica import logica, logica_pura, logica_card
+from logica import logica, logica_pura
 from webserver import run
 
 import os
@@ -12,13 +12,14 @@ import os
 # Testa existencia do Webhook. Caso negativo, cria
 # primeiro tenta variavies de ambiente, depois usa da config
 msg=ValidaWebhook(os.getenv('WH_NAME',webhook_name),os.getenv('WH_URL',webhook_url))
+
 # Imprime erro caso validacao do Webhook nao funcionou
 if msg=="erro":
     print ("Erro de Webhook")
 
 
 #Formato de execucao em modo console (teste)
-formato = "w"
+formato = "c"
 
 # Formato da conversa
 # 0 = usuário constroi sua própria arvore de decisão
