@@ -8,10 +8,6 @@ import json
 
 # Edit this
 bot_language="BR"
-#bottoken="MjU3NGQyODUtZjg2MC00MmQ0LThiYjUtMTUyZTNjODcyZTY3MGExNTRkYTktYTdh_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f"
-#botmail="infobot@webe@sparkbot.io"
-#webhook_url="http://botdistance.herokuapp.com"
-#webhook_name="novoapp2"
 bottoken=""
 botmail=""
 webhook_name=""
