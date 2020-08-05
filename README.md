@@ -65,7 +65,7 @@ Edite este arquivo conforme o interesse do seu projeto. Você pode editar o arqu
 
 O robô diferencia administradores de usuários comuns, caso certos comandos precisem desta organização.
 
-Para identificar quais são os administradores, coloque endereços de email separados por vígula na variável *admins* no arquivo *config.py*
+Para identificar quais são os administradores, coloque endereços de email separados por vírgula na variável *admins* no arquivo *config.py*
 
 O robô também tem um mecanismo para enviar mensagems para uma sala de administradores. Para isto defina o nome da sala dos admins na variável *admins_room* no arquivo *config.py*.
  
