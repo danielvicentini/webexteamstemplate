@@ -28,7 +28,7 @@ Modelo para criação do seu bot Webex Teams.
 * Definir local de implantantação do bot (Plataforma PaaS, IaaS, etc)
 * Definir URL do Bot
 * Token e email do Bot Webex Teams
-* Definir 1 palavra chave para Webhooks
+* Definir identificador para Webhooks
 
 ### Passos para Instalação
 
@@ -36,11 +36,12 @@ Modelo para criação do seu bot Webex Teams.
 * Apontar os parâmetros do Robo. Opções:
 * Opção 1: Editar o arquivo *config.py* com os 4 parametros necessários: Token, Email, URL e identificador do Webhook
 * Opção 2: Criar os 4 parametros como variáveis de ambiente com os seguintes nomes:
-    * WH_NAME = identificado ro webhook
+    * WH_NAME = identificador do webhook
     * WH_URL = endereço e porta da URL onde o bot ficará hospedado (porta default é 80)
     * BOT_MAIL = endereço de email do bot
     * BOT_TOKEN = Token do Bot
-* Opcional: O Robô fornece informações em português ou ingles. Defina esta opção na variável *bot_language* no arquivo *config.py*. Use BR para português. Qualquer outro conjunto de letras será usado Inglês.
+* Opcional: O Robô fornece informações em português ou inglês.
+    * Defina esta opção na variável *bot_language* no arquivo *config.py*. Use BR para português. Qualquer outro conjunto de letras será usado Inglês.
 
 ### Opções para o usuário
 
@@ -49,6 +50,7 @@ O robô usará um arquivo de opções para apresentá-las ao usuário. Esta info
 Edite este arquivo conforme o interesse do seu projeto.
 
 Identificação das opções:
+
 * option: identificador único do comando - este valor será utilizado para executar as funções que vc irá criar
 * tag: conjunto de palavras que o robô vai usar para tentar adivinhar o que o usuário escreve
 * title: O título do comando que será apresentado para o usuário
@@ -67,7 +69,8 @@ Para identificar quais são os administradores, coloque endereços de email sepa
 
 O robô também tem um mecanismo para enviar mensagems para uma sala de administradores. Para isto defina o nome da sala dos admins na variável *admins_room* no arquivo *config.py*.
  
-### Uso
+ 
+## Uso
 
 Abrir uma sala 1:1 com o seu bot. Perguntar por **Ajuda** ou **Help**. O robô apresentará as opções disponíveis no arquivo *options.json* caso o usuário tenha direito a ele.
 
@@ -106,13 +109,14 @@ Para tanto, editar o arquivo *meubot.py* e editar a variável **formato="c"**. N
 
 Para sair do modo console, digite **Exit**.
 
-### Rodando o projeto
-
-Rodar o bot chamando o código principal *meubot.py*
-
 ### Colocando em Produção
 
 Editar o arquivo *meubot.py* e editar a variável **formato="w"**. Neste modelo o robô levanta o servidor Web e fica no aguardo dos webhooks dos usuários.
+
+
+### Rodando o projeto
+
+Rodar o bot chamando o código principal *meubot.py*
 
 
 
