@@ -88,7 +88,7 @@ Neste exemplo, o robô tem 1 função de apresentar o parâmetro que você digit
 
 def executa(codigo,lista_de_parametros):
 
-     if codigo=10:
+     if codigo==10:
  
          #pega o primeiro parametro informado
 
@@ -120,10 +120,14 @@ Rodar o bot chamando o código principal *meubot.py*
 
 
 
+
+### Daniel Vicentini
+
+Email: dvicenti@cisco.com
+
 Feito em Pyton 3.7.2
 
-Daniel Vicentini
 
 Atualizado em 05 de agosto de 2020
 
-v2.24 de julho de 2020
+v2.0 24 de julho de 2020
