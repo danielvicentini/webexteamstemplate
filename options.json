@@ -3,7 +3,7 @@
 		"title": "Rodar algo com dois parametros",
 		"desc": "Exemplo que pede para usuario informar 2 parametros.",
 		"option": 30,
-		"admin": true,
+		"admin": false,
 		"req": true,
 		"params": "parametro 1, parametro 2"
 	}, {
@@ -11,7 +11,7 @@
 		"title": "Rodar algo com um parametro",
 		"desc": "Exemplo que pede para usuario informar 1 parametro.",
 		"option": 20,
-		"admin": true,
+		"admin": false,
 		"req": true,
 		"params": "parametro 1"
 		
@@ -20,13 +20,13 @@
 		"title": "Rodar algo sem parametros",
 		"desc": "Exemplo que roda uma funcao sem parametros.",
 		"option": 10,
-		"admin": true,
+		"admin": false,
 		"req": false
 	
 	}, {
 		"tag": "rodar algo com tres parametros",
 		"title": "Rodar algo com tres parametros",
-		"desc": "Exemplo que roda uma funcao sem parametros.",
+		"desc": "Exemplo que roda uma funcao com tres parametros.",
 		"option": 40,
 		"admin": false,
 		"req": true,
