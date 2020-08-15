@@ -50,7 +50,7 @@ def executa(codigo, lista_parametros):
     # MSG = O texto que é Obrigatório
     # Arquivo = Um arquivo que é anexado a mensagem no Teams
     # CARD = um Card do Webex no formato JSON (FUTURO)
-
+    func=""
     #para msg
     msg=""
     #para arquivo
