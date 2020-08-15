@@ -1,4 +1,4 @@
-# Webex Teams Template 3.0
+# Webex Teams Bot Template 3.0
 
 Modelo para criação do seu bot Webex Teams.
 
