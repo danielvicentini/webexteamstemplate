@@ -80,7 +80,7 @@ Caso o usuário deseje utilizar o modelo de formulários (Cards) ele pode optar 
 
 ### Funcões a serem criadas conforme seu projeto
 
-Após seleção da opções e parâmetros, o robô executará a função específica conforme seu identificador único . Seu trabalho será popular o arquivo *funcoes.py* para executar suas funções. A função *executa(codigo, lista_de_parametros)* é a responsável em receber os dados e executar as funções.
+Após seleção da opções e parâmetros, o robô executará a função específica conforme seu identificador único . Seu trabalho será popular o arquivo *funcoes.py* para executar suas funções. A função *executa(usermail, codigo, lista_de_parametros)* é a responsável em receber os dados e executar as funções.
 
 ### Exemplo: função simples que devolve um informação
 
