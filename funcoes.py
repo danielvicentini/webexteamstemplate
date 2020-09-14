@@ -42,7 +42,7 @@ def tresparametros(parA,parB,parC):
 # identifique o que foi pedido pela variável codigo
 # os parametros digitados estao em formato de lista na variável lista_parametros
 
-def executa(codigo, lista_parametros):
+def executa(usermail, codigo, lista_parametros):
 
     # deve retornar em formato de texto + arquivo com msg e arquivo
 
@@ -50,6 +50,7 @@ def executa(codigo, lista_parametros):
     # MSG = O texto que é Obrigatório
     # Arquivo = Um arquivo que é anexado a mensagem no Teams
     # CARD = um Card do Webex no formato JSON (FUTURO)
+
     func=""
     #para msg
     msg=""

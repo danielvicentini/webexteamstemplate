@@ -109,7 +109,7 @@ def trataPOST(content):
                 # executa conforme o codigo escolhido no menu
                 # executa a logica
                 try:
-                    msg,arquivo=executa(option,lista_parametros)
+                    msg,arquivo=executa(usermail,option,lista_parametros)
                 except:
                     print ("Erro de logica.")
             

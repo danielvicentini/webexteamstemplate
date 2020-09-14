@@ -492,7 +492,7 @@ def logica(comando,usermail,salaid):
 
                 #trata os comandos conforme necessidade do projeto
                 resultado=""                            
-                resultado,arquivo=executa(codigo,lista_parametros)
+                resultado,arquivo=executa(usermail,codigo,lista_parametros)
                 
                 if resultado=="":
                     # Devolveu resultado vazio - provavelmente porque funcao nao retornou nada ou erro no código
