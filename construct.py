@@ -6,7 +6,7 @@ import json
 # Gera um template para que o bot apresente estas opcoes para o usuario
 
 # Gerador de Opcoes para Bot 1.0
-print (f"Gerador de opcoes para bot 2.0\n")
+print (f"Gerador de opcoes para bot 3.0\n")
 
 # Se nao for valor inteiro, sai
 try:
