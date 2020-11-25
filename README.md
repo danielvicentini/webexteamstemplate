@@ -19,7 +19,7 @@ Modelo para criação do seu bot Webex Teams.
 * Pronto para pedir os parâmetros do comando
 * Devolve código do comando e os parâmetros digitados para o desenvolvedor construir imediatamente suas funções para seu projeto
 * Permite rodar em modelo de teste local (linha de comando) antes da produção
-* Infraestrutura Web pronta para receber Webhook e POSTS integrada
+* Infraestrutura Web integrada pronta para receber Webhook e POSTS
 
 ## Instalação
 
