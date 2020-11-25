@@ -14,7 +14,7 @@ Modelo para criação do seu bot Webex Teams.
 
 * Mecanismo de arvore de decisão para convesar com o usuário e entender o comando pedido
 * Mecanismo de formulário (Cards) para facilitar a interação com os usuários
-* Suporta comandos para usuários do tipo adminsitrador e usuário comum
+* Suporta comandos para usuários do tipo administrador e usuário comum
 * Suporta a construção rápida dos comandos através de arquivo JSON
 * Pronto para pedir os parâmetros do comando
 * Devolve código do comando e os parâmetros digitados para o desenvolvedor construir imediatamente suas funções para seu projeto
