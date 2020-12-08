@@ -74,7 +74,7 @@ O robô também tem um mecanismo para enviar mensagems para uma sala de administ
 
 Abrir uma sala 1:1 com o seu bot. Perguntar por **Ajuda** ou **Help**. O robô apresentará as opções disponíveis no arquivo *options.json* caso o usuário tenha direito a ele.
 
-O robô irá perguntar baseado no que foi pedido pelo usuário o comando mais aproximado, caso o usuário confirme, o robô passará a pedir os parâmetros para executar esta função.
+O robô irá perguntar baseado no que foi pedido pelo usuário o comando mais aproximado. Caso o usuário confirme, o robô passará a pedir os parâmetros para executar esta função.
 
 Caso o usuário deseje utilizar o modelo de formulários (Cards) ele pode optar por este modelo rodando o comando **menucard**. O Robô passará a apresentar as alternativas e pedir os parâmetros de função usando os Cards.
 
@@ -123,7 +123,7 @@ Rodar o bot chamando o código principal *meubot.py*
 
 ### Daniel Vicentini
 
-Email: dvicenti@cisco.com
+Email: danielvicentini@hotmail.com
 
 Feito em Pyton 3.7.2
 
